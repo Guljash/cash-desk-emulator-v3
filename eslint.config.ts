@@ -705,7 +705,6 @@ const vueRules = {
   'vue/match-component-import-name': ['off'],
   'vue/multi-word-component-names': ['off'],
   'vue/next-tick-style': ['error'],
-  'vue/no-bare-strings-in-template': ['warn'],
   'vue/no-boolean-default': ['warn', 'default-false'],
   // 'vue/no-deprecated-delete-set': ['error'],
   'vue/no-constant-condition': ['warn'],

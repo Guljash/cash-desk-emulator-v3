@@ -1,10 +1,8 @@
-import './assets/main.css'
-
 import {
   createApp,
 } from 'vue'
-import App from './App.vue'
-import router from './router/index.ts'
+import App from '@/app/app.vue'
+import router from '@/app/router/index.ts'
 
 const app = createApp(App)
 
