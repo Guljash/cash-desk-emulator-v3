@@ -2,7 +2,7 @@
 import SkuItem from '@/modules/calculations/ui/desktop/sku-item.vue'
 import {
   useCalculationStore,
-} from '@/modules/calculations/services/calculations-store-adapter.js'
+} from '@/modules/calculations/services/calculations-store-adapter.ts'
 
 const {skuList} = useCalculationStore()
 </script>

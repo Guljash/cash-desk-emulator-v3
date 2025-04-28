@@ -1,14 +1,14 @@
 import {
-  useCalculationStore,
-} from '@/modules/calculations/services/calculations-store-adapter.ts'
-import {
   get,
   set,
 } from '@vueuse/core'
 import {
+  useCalculationStore,
+} from '@/modules/calculations/services/calculations-store-adapter.ts'
+import {
   type Sku,
   type SkuId,
-} from '@/modules/calculations/domain/types.js'
+} from '@/modules/calculations/domain/types.ts'
 
 interface UseAddSku {
   addSku: (id: SkuId, multiplier: number) => void

@@ -2,16 +2,16 @@
 import {
   ref,
 } from 'vue'
-import CalculationsTable from '@/modules/calculations/ui/desktop/calculations-table.vue'
-import {
-  useAddSku,
-} from '@/modules/calculations/application/use-add-sku.js'
 import {
   get,
 } from '@vueuse/core'
+import CalculationsTable from '@/modules/calculations/ui/desktop/calculations-table.vue'
+import {
+  useAddSku,
+} from '@/modules/calculations/application/use-add-sku.ts'
 import {
   type SkuId,
-} from '@/modules/calculations/domain/types.js'
+} from '@/modules/calculations/domain/types.ts'
 
 const {addSku} = useAddSku()
 

@@ -1,15 +1,15 @@
 import {
+  set,
+} from '@vueuse/core'
+import {
   useCalculationStore,
 } from '@/modules/calculations/services/calculations-store-adapter.ts'
 import {
   useCalculationsApiAdapter,
 } from '@/modules/calculations/services/calculations-api-adapter.ts'
 import {
-  set,
-} from '@vueuse/core'
-import {
   type SkuMap,
-} from '@/modules/calculations/domain/types.js'
+} from '@/modules/calculations/domain/types.ts'
 
 interface UseLoadSkuDb {
   loadSkuDb: () => Promise<void>

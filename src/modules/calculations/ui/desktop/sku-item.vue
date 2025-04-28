@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   type Sku,
-} from '@/modules/calculations/domain/types.js'
+} from '@/modules/calculations/domain/types.ts'
 
 const props = defineProps<{
   sku: Sku

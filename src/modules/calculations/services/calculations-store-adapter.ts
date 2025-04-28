@@ -7,7 +7,7 @@ import {
 import {
   type Sku,
   type SkuMap,
-} from '@/modules/calculations/domain/types.js'
+} from '@/modules/calculations/domain/types.ts'
 
 export const useCalculationStore = createGlobalState(() => {
   const skuDb = ref<SkuMap>({} as SkuMap)
