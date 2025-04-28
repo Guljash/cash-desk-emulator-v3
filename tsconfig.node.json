@@ -1,19 +1,22 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
+  "extends": "@tsconfig/node20/tsconfig.json",
   "include": [
-    "vite.config.*",
-    "vitest.config.*",
-    "cypress.config.*",
-    "nightwatch.conf.*",
-    "playwright.config.*",
-    "eslint.config.*"
+    "eslint.config.js",
+    "package.json",
+    "postcss.config.cjs",
+    "stylelint.config.cjs",
+    "tsconfig.app.json",
+    "tsconfig.json",
+    "tsconfig.node.json",
+    "vite.config.ts"
   ],
   "compilerOptions": {
-    "noEmit": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    //    "composite": true,
+    //    "noEmit": true,
+    //    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
 
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "types": ["node"]
+    //    "module": "ESNext",
+    //    "moduleResolution": "node",
+    //    "types": ["node"]
   }
 }
