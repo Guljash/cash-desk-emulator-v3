@@ -4,24 +4,28 @@ import {
 } from '@/modules/calculations/domain/types.ts'
 import {
   useCalculationStore,
-} from '@/modules/calculations/services/calculations-store-adapter.js'
+} from '@/modules/calculations/services/calculations-store-adapter.ts'
 import {
   computed,
 } from 'vue'
 import {
   get,
 } from '@vueuse/core'
+import {
+  useDeleteSku,
+} from '@/modules/calculations/application/use-delete-sku.ts'
 
 const props = defineProps<{
   sku: Sku
 }>()
 
 const {selectedSku} = useCalculationStore()
+const {deleteSku} = useDeleteSku()
 
 const isSkuSelected = computed(() => get(selectedSku)?.id == props.sku.id)
 
-const onDeleteScu = (id: number): void => {
-  console.log('deleted', id)
+const onDeleteSku = (id: number): void => {
+  deleteSku(id)
 }
 </script>
 
@@ -35,7 +39,7 @@ const onDeleteScu = (id: number): void => {
     <td class="actions">
       <button
         type="button"
-        @click="onDeleteScu(101)"
+        @click.stop="onDeleteSku(sku.id)"
         class="btn btn-danger btn-sm"
       >
         🗑️
