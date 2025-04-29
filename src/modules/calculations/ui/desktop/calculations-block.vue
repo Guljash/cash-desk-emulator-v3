@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {
+  computed,
   ref,
 } from 'vue'
 import {
   get,
+  set,
 } from '@vueuse/core'
 import CalculationsTable from '@/modules/calculations/ui/desktop/calculations-table.vue'
 import {
@@ -12,23 +14,39 @@ import {
 import {
   type SkuId,
 } from '@/modules/calculations/domain/types.ts'
+import {
+  useCalculationStore,
+} from '@/modules/calculations/services/calculations-store-adapter.js'
+import {
+  useChangeMultiplier,
+} from '@/modules/calculations/application/use-change-multiplier.ts'
 
+const {skuList, selectedSku} = useCalculationStore()
 const {addSku} = useAddSku()
+const {changeMultiplier} = useChangeMultiplier()
 
 const inputModeValue = ref('')
 
+const result = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0)))
+
 const onAddSku = (): void => {
-  if (get(inputModeValue) === undefined) {
-    return
-  }
   addSku(parseInt(get(inputModeValue)) as SkuId, 1)
+  set(inputModeValue, '')
+}
+
+const onChangeMultiplier = (): void => {
+  changeMultiplier(get(selectedSku)?.id, parseInt(get(inputModeValue)))
+
+  set(inputModeValue, '')
 }
 
 const instanceName = ref('Клиент 1')
 </script>
 
 <template>
-  <main class="main-content">
+  <main
+    class="main-content"
+  >
     <div class="articles-block">
       <h2>{{ instanceName }}</h2>
 
@@ -38,12 +56,15 @@ const instanceName = ref('Клиент 1')
         <div class="buttons-group">
           <button
             @click="onAddSku"
+            :disabled="inputModeValue === ''"
             type="button"
             class="btn btn-primary"
           >
             Добавить артикул
           </button>
           <button
+            @click="onChangeMultiplier"
+            :disabled="inputModeValue === ''"
             type="button"
             class="btn btn-secondary"
           >
@@ -51,20 +72,27 @@ const instanceName = ref('Клиент 1')
           </button>
           <button
             type="button"
+            :disabled="inputModeValue === ''"
             class="btn btn-secondary"
           >
             Скидка по позиции
           </button>
           <button
             type="button"
+            :disabled="inputModeValue === ''"
             class="btn btn-secondary"
           >
             Скидка на чек
           </button>
+          <span>
+            Итого: {{ result }}
+          </span>
         </div>
 
         <div class="input-group">
           <input
+            @keydown.enter="onAddSku"
+            @keydown.prevent.+="onChangeMultiplier"
             v-model="inputModeValue"
             type="text"
             class="input-field"

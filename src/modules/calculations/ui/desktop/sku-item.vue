@@ -2,10 +2,23 @@
 import {
   type Sku,
 } from '@/modules/calculations/domain/types.ts'
+import {
+  useCalculationStore,
+} from '@/modules/calculations/services/calculations-store-adapter.js'
+import {
+  computed,
+} from 'vue'
+import {
+  get,
+} from '@vueuse/core'
 
 const props = defineProps<{
   sku: Sku
 }>()
+
+const {selectedSku} = useCalculationStore()
+
+const isSkuSelected = computed(() => get(selectedSku)?.id == props.sku.id)
 
 const onDeleteScu = (id: number): void => {
   console.log('deleted', id)
@@ -13,7 +26,7 @@ const onDeleteScu = (id: number): void => {
 </script>
 
 <template>
-  <tr>
+  <tr :class="{active: isSkuSelected}">
     <td>{{ sku.id }}</td>
     <td>__name__</td>
     <td>{{ sku.multiplier }}</td>
@@ -35,6 +48,10 @@ const onDeleteScu = (id: number): void => {
 .articles-table td {
   padding: 0.75rem;
   border-bottom: 1px solid #e0e0e0;
+}
+
+.articles-table .active {
+  background-color: #f5f5f5;
 }
 
 .articles-table tr:hover {

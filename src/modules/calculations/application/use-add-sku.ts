@@ -9,13 +9,17 @@ import {
   type Sku,
   type SkuId,
 } from '@/modules/calculations/domain/types.ts'
+import {
+  useChangeMultiplier,
+} from '@/modules/calculations/application/use-change-multiplier.js'
 
 interface UseAddSku {
   addSku: (id: SkuId, multiplier: number) => void
 }
 
 export const useAddSku = (): UseAddSku => {
-  const {skuDb, skuList} = useCalculationStore()
+  const {skuDb, skuList, selectedSku} = useCalculationStore()
+  const {changeMultiplier} = useChangeMultiplier()
 
   const addSku = (id: SkuId, multiplier: number): void => {
     const currentSkuIdDb = get(skuDb)[id]
@@ -24,8 +28,10 @@ export const useAddSku = (): UseAddSku => {
       return
     }
 
-    if (get(skuList).some((skuItem) => skuItem.id === id)) {
-      // меняем количество
+    const foundedSku = get(skuList).find((skuItem) => skuItem.id === id)
+
+    if (foundedSku) {
+      changeMultiplier(id, foundedSku.multiplier + multiplier)
       return
     }
 
@@ -33,10 +39,11 @@ export const useAddSku = (): UseAddSku => {
       id,
       multiplier,
       cost: currentSkuIdDb.cost,
-      active: true,
       discount: 0,
+      ...currentSkuIdDb.steps && {steps: currentSkuIdDb.steps},
     }
 
+    set(selectedSku, sku)
     set(skuList, [...get(skuList), sku])
   }
 

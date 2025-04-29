@@ -3,8 +3,18 @@ import SkuItem from '@/modules/calculations/ui/desktop/sku-item.vue'
 import {
   useCalculationStore,
 } from '@/modules/calculations/services/calculations-store-adapter.ts'
+import {
+  type Sku,
+} from '@/modules/calculations/domain/types.ts'
+import {
+  set,
+} from '@vueuse/core'
 
-const {skuList} = useCalculationStore()
+const {skuList, selectedSku} = useCalculationStore()
+
+const onSelectSku = (sku: Sku): void => {
+  set(selectedSku, sku)
+}
 </script>
 
 <template>
@@ -22,6 +32,7 @@ const {skuList} = useCalculationStore()
     <tbody>
       <SkuItem
         v-for="sku in skuList"
+        @click="onSelectSku(sku)"
         :key="sku.id"
         :sku="sku"
       />

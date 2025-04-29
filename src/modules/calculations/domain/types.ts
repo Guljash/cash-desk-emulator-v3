@@ -13,8 +13,7 @@ export interface SkuBase {
   steps?: Steps
 }
 
-export interface Sku extends Omit<SkuBase, 'steps'> {
-  active: boolean
+export interface Sku extends SkuBase {
   discount: number
   multiplier: number
 }

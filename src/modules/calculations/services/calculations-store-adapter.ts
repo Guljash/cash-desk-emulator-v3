@@ -13,8 +13,11 @@ export const useCalculationStore = createGlobalState(() => {
   const skuDb = ref<SkuMap>({} as SkuMap)
   const skuList = ref<Sku[]>([] as Sku[])
 
+  const selectedSku = ref<Sku>()
+
   return {
     skuDb,
     skuList,
+    selectedSku,
   }
 })
