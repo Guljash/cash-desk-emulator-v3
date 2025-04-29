@@ -17,7 +17,7 @@ export const useDeleteSku = (): UseDeleteSku => {
 
   const deleteSku = (id: SkuId): void => {
     set(skuList, [...get(skuList).filter((sku) => sku.id !== id)])
-    set(selectedSku, get(skuList).at(-1))
+    set(selectedSku, get(skuList).at(-1) ?? [])
   }
 
   return {
