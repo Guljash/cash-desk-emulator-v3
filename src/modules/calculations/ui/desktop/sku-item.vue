@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   type Sku,
+  type SkuId,
 } from '@/modules/calculations/domain/types.ts'
 import {
   useCalculationStore,
@@ -11,21 +12,19 @@ import {
 import {
   get,
 } from '@vueuse/core'
-import {
-  useDeleteSku,
-} from '@/modules/calculations/application/use-delete-sku.ts'
 
 const props = defineProps<{
   sku: Sku
 }>()
 
+const emit = defineEmits<(e: 'deleteSku', id: SkuId) => void>()
+
 const {selectedSku} = useCalculationStore()
-const {deleteSku} = useDeleteSku()
 
 const isSkuSelected = computed(() => get(selectedSku)?.id == props.sku.id)
 
 const onDeleteSku = (id: number): void => {
-  deleteSku(id)
+  emit('deleteSku', id)
 }
 </script>
 
@@ -35,7 +34,7 @@ const onDeleteSku = (id: number): void => {
     <td>__name__</td>
     <td>{{ sku.multiplier }}</td>
     <td>{{ sku.cost }} ₽</td>
-    <td><span class="discount-badge">{{ sku.discount }}%</span></td>
+    <td><span v-if="sku.discount > 0" class="discount-badge">{{ sku.discount }}%</span></td>
     <td class="actions">
       <button
         type="button"

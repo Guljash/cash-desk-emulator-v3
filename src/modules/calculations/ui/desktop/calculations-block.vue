@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   computed,
+  nextTick,
   ref,
 } from 'vue'
 import {
@@ -13,6 +14,7 @@ import {
 } from '@/modules/calculations/application/use-add-sku.ts'
 import {
   type SkuId,
+  type Sku,
 } from '@/modules/calculations/domain/types.ts'
 import {
   useCalculationStore,
@@ -20,27 +22,93 @@ import {
 import {
   useChangeMultiplier,
 } from '@/modules/calculations/application/use-change-multiplier.ts'
+import {
+  useDeleteSku,
+} from '@/modules/calculations/application/use-delete-sku.js'
+import {
+  useSetDiscount,
+} from '@/modules/calculations/application/use-set-discount.js'
 
 const {skuList, selectedSku} = useCalculationStore()
 const {addSku} = useAddSku()
 const {changeMultiplier} = useChangeMultiplier()
+const {deleteSku} = useDeleteSku()
+const {setDiscount, setDiscountForAll} = useSetDiscount()
 
-const inputModeValue = ref('')
+const inputModelValue = defineModel({
+  set(value: string) {
+    const temp = value.replace('.', ',')
+    console.log(temp)
+    return temp
+  },
+})
+
+const inputField = ref<HTMLInputElement | undefined>(undefined)
 
 const result = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0)))
+const isBtnDisabled = computed(() => get(inputModelValue) === '')
+
+const resetInputModelValue = (): void => {
+  set(inputModelValue, '')
+}
+
+const withWrapper = <T extends () => void>(cb: T): void => {
+  cb()
+
+  resetInputModelValue()
+}
 
 const onAddSku = (): void => {
-  addSku(parseInt(get(inputModeValue)) as SkuId, 1)
-  set(inputModeValue, '')
+  const rawInput = get(inputModelValue).trim()
+
+  let idPart: string | undefined
+  let multiplierPart: string | undefined
+
+  if (rawInput.includes(',')) {
+    [idPart, multiplierPart] = rawInput.split(',').map((part) => part.trim())
+  } else {
+    idPart = rawInput
+    multiplierPart = undefined
+  }
+
+  const id = parseInt(idPart ?? '')
+  const multiplier = multiplierPart ? parseFloat(multiplierPart) : 1
+
+  addSku(id, multiplier)
 }
 
-const onChangeMultiplier = (): void => {
-  changeMultiplier(get(selectedSku)?.id, parseInt(get(inputModeValue)))
+const onSelectSku = async (sku: Sku): Promise<void> => {
+  set(selectedSku, sku)
 
-  set(inputModeValue, '')
+  await nextTick()
+
+  get(inputField)?.focus()
 }
 
-const instanceName = ref('Клиент 1')
+const onNavigateSku = (direction: 'down' | 'up'): void => {
+  if (get(selectedSku) === undefined) {
+    return
+  }
+
+  const selectedSkuIndex = get(skuList).findIndex((sku) => sku.id === get(selectedSku)?.id)
+
+  if (selectedSkuIndex === -1) {
+    return
+  }
+
+  const getNewIndex = (): number => {
+    const lastIndex = get(skuList).length - 1
+
+    if (direction === 'down') {
+      return selectedSkuIndex === lastIndex ? 0 : selectedSkuIndex + 1
+    }
+
+    return selectedSkuIndex === 0 ? lastIndex : selectedSkuIndex - 1
+  }
+
+  set(selectedSku, get(skuList).at(getNewIndex()))
+}
+// const instanceName = ref('Клиент 1')
 </script>
 
 <template>
@@ -48,38 +116,43 @@ const instanceName = ref('Клиент 1')
     class="main-content"
   >
     <div class="articles-block">
-      <h2>{{ instanceName }}</h2>
+      <!--      <h2>{{ instanceName }}</h2> -->
 
-      <CalculationsTable />
+      <CalculationsTable
+        @selectSku="onSelectSku"
+        @deleteSku="(id) => withWrapper(() => deleteSku(id))"
+      />
 
       <div class="input-form-wrapper">
         <div class="buttons-group">
           <button
-            @click="onAddSku"
-            :disabled="inputModeValue === ''"
+            @click="withWrapper(onAddSku)"
+            :disabled="isBtnDisabled"
             type="button"
             class="btn btn-primary"
           >
             Добавить артикул
           </button>
           <button
-            @click="onChangeMultiplier"
-            :disabled="inputModeValue === ''"
+            @click="withWrapper(() => changeMultiplier(selectedSku?.id, parseInt(inputModelValue)))"
+            :disabled="isBtnDisabled"
             type="button"
             class="btn btn-secondary"
           >
             Изменить количество
           </button>
           <button
+            @click="withWrapper(() => setDiscount(selectedSku?.id, parseInt(inputModelValue)))"
             type="button"
-            :disabled="inputModeValue === ''"
+            :disabled="isBtnDisabled"
             class="btn btn-secondary"
           >
             Скидка по позиции
           </button>
           <button
+            @click="withWrapper(() => setDiscountForAll(parseInt(inputModelValue)))"
             type="button"
-            :disabled="inputModeValue === ''"
+            :disabled="isBtnDisabled"
             class="btn btn-secondary"
           >
             Скидка на чек
@@ -91,10 +164,13 @@ const instanceName = ref('Клиент 1')
 
         <div class="input-group">
           <input
-            @keydown.enter="onAddSku"
-            @keydown.prevent.+="onChangeMultiplier"
-            v-model="inputModeValue"
+            @keydown.enter="withWrapper(onAddSku)"
+            @keydown.prevent.+="withWrapper(() => changeMultiplier(selectedSku?.id, parseInt(inputModelValue)))"
+            @keydown.up="onNavigateSku('up')"
+            @keydown.down="onNavigateSku('down')"
+            v-model="inputModelValue"
             type="text"
+            ref="inputField"
             class="input-field"
             placeholder="Введите артикул или название товара"
           >

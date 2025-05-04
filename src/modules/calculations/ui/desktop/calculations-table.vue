@@ -5,15 +5,22 @@ import {
 } from '@/modules/calculations/services/calculations-store-adapter.ts'
 import {
   type Sku,
+  type SkuId,
 } from '@/modules/calculations/domain/types.ts'
-import {
-  set,
-} from '@vueuse/core'
 
-const {skuList, selectedSku} = useCalculationStore()
+const emit = defineEmits<{
+  (e: 'selectSku', sku: Sku): void
+  (e: 'deleteSku', id: SkuId): void
+}>()
+
+const {skuList} = useCalculationStore()
 
 const onSelectSku = (sku: Sku): void => {
-  set(selectedSku, sku)
+  emit('selectSku', sku)
+}
+
+const onDeleteSku = (id: number): void => {
+  emit('deleteSku', id)
 }
 </script>
 
@@ -33,6 +40,7 @@ const onSelectSku = (sku: Sku): void => {
       <SkuItem
         v-for="sku in skuList"
         @click="onSelectSku(sku)"
+        @deleteSku="onDeleteSku(sku.id)"
         :key="sku.id"
         :sku="sku"
       />
