@@ -35,22 +35,30 @@ const {changeMultiplier} = useChangeMultiplier()
 const {deleteSku} = useDeleteSku()
 const {setDiscount, setDiscountForAll} = useSetDiscount()
 
-const inputModelValue = defineModel({
-  set(value: string) {
-    const temp = value.replace('.', ',')
-    console.log(temp)
-    return temp
-  },
-})
-
 const inputField = ref<HTMLInputElement | undefined>(undefined)
 
-const result = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0)))
-const isBtnDisabled = computed(() => get(inputModelValue) === '')
+const normalizeDecimalSeparator = (value: string): string => {
+  const validationResult = value.match(/[0-9]*[.,]?[0-9]*/)
+
+  return Array.isArray(validationResult) ? validationResult[0].replace(/\./g, ',') : ''
+}
+
+const inputModelValue = defineModel<string>({
+  set(value) {
+    return normalizeDecimalSeparator(value)
+  },
+  get(value) {
+    return normalizeDecimalSeparator(value)
+  },
+  default: '',
+})
 
 const resetInputModelValue = (): void => {
   set(inputModelValue, '')
 }
+
+const result = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0)))
+const isBtnDisabled = computed(() => get(inputModelValue) === '')
 
 const withWrapper = <T extends () => void>(cb: T): void => {
   cb()

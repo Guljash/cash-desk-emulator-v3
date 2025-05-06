@@ -12,17 +12,21 @@ import {
 import {
   useChangeMultiplier,
 } from '@/modules/calculations/application/use-change-multiplier.js'
+import {
+  useSetDiscount,
+} from '@/modules/calculations/application/use-set-discount.js'
 
 interface UseAddSku {
   addSku: (id: SkuId, multiplier: number) => void
 }
 
 export const useAddSku = (): UseAddSku => {
-  const {skuDb, skuList, selectedSku} = useCalculationStore()
+  const {skuMap, skuList, selectedSku} = useCalculationStore()
   const {changeMultiplier} = useChangeMultiplier()
+  const {discountForAllPercent, setDiscount} = useSetDiscount()
 
   const addSku = (id: SkuId, multiplier: number): void => {
-    const currentSkuIdDb = get(skuDb)[id]
+    const currentSkuIdDb = skuMap.get(id)
 
     if (currentSkuIdDb === undefined) {
       return
@@ -45,6 +49,10 @@ export const useAddSku = (): UseAddSku => {
 
     set(selectedSku, sku)
     set(skuList, [...get(skuList), sku])
+
+    if (get(discountForAllPercent) > 0) {
+      setDiscount(id, get(discountForAllPercent))
+    }
   }
 
   return {

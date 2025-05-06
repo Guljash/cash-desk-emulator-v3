@@ -18,4 +18,4 @@ export interface Sku extends SkuBase {
   multiplier: number
 }
 
-export type SkuMap = Record<SkuId, Omit<SkuBase, 'id'>>
+export type SkuMap = Map<SkuId, Omit<SkuBase, 'id'>>
