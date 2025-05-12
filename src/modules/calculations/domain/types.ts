@@ -2,10 +2,10 @@ export type SkuId = number
 
 export interface Steps {
   method: PriceChangeMethod
-  stepsData: {multiplier: number[]; value: number[]}
+  stepsData: {multiplier: number; value: number}[]
 }
 
-export type PriceChangeMethod = 'discount' | 'multiplier'
+export type PriceChangeMethod = 'cost' | 'discount'
 
 export interface SkuBase {
   cost: number

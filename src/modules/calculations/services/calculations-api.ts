@@ -11,8 +11,13 @@ export const useCalculationsApi = (): UseCalculationsApi => {
             id: 101,
             cost: 10,
             steps: {
-              method: 'multiplier',
-              stepsData: {multiplier: [10, 100, 1000], value: [10, 7, 5, 3]},
+              method: 'cost',
+              stepsData: [
+                {multiplier: 10, value: 10},
+                {multiplier: 100, value: 7},
+                {multiplier: 1000, value: 5},
+                {multiplier: null, value: 3},
+              ],
             },
           },
           {
@@ -20,6 +25,19 @@ export const useCalculationsApi = (): UseCalculationsApi => {
           },
           {
             id: 158, cost: 36, discount: 0,
+          },
+          {
+            id: 130,
+            cost: 25,
+            steps: {
+              method: 'discount',
+              stepsData: [
+                {multiplier: 10, value: 0},
+                {multiplier: 500, value: 40},
+                {multiplier: 1000, value: 60},
+                {multiplier: null, value: 80},
+              ],
+            },
           },
         ])
       }, 1000)
