@@ -8,7 +8,7 @@ import {
 } from '@/modules/calculations/domain/types.ts'
 
 interface UseCalculationsApiAdapter {
-  getSku: () => Promise<SkuBase[]>
+  getSku: () => Promise<Readonly<SkuBase[]>>
 }
 
 interface RawSteps {

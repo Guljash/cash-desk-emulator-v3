@@ -30,7 +30,7 @@ import {
 } from '@/modules/calculations/application/use-set-discount.js'
 
 const {skuList, selectedSku} = useCalculationStore()
-const {addSku} = useAddSku()
+const {addSkuById} = useAddSku()
 const {changeMultiplier} = useChangeMultiplier()
 const {deleteSku} = useDeleteSku()
 const {setDiscount, setDiscountForAll} = useSetDiscount()
@@ -82,7 +82,7 @@ const onAddSku = (): void => {
   const id = parseInt(idPart ?? '')
   const multiplier = multiplierPart ? parseFloat(multiplierPart) : 1
 
-  addSku(id, multiplier)
+  addSkuById(id, multiplier)
 }
 
 const onSelectSku = async (sku: Sku): Promise<void> => {

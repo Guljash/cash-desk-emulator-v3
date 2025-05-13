@@ -17,7 +17,7 @@ interface UseChangeMultiplier {
 export const useChangeMultiplier = (): UseChangeMultiplier => {
   const {skuList} = useCalculationStore()
 
-  const createSkuItem = (sku: Sku, multiplier: number): Sku => {
+  const applyStepToSku = (sku: Sku, multiplier: number): Sku => {
     const changedSku = {...sku, multiplier}
 
     switch (sku?.steps?.method) {
@@ -41,7 +41,7 @@ export const useChangeMultiplier = (): UseChangeMultiplier => {
       return
     }
 
-    const changedSkuList = get(skuList).map((sku) => sku.id === id ? createSkuItem(sku, multiplier) : sku)
+    const changedSkuList = get(skuList).map((sku) => sku.id === id ? applyStepToSku(sku, multiplier) : sku)
 
     set(skuList, changedSkuList)
   }
