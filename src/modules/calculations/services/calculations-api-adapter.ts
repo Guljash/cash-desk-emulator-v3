@@ -5,6 +5,13 @@ import {
   type SkuBase,
   type Steps,
 } from '@/modules/calculations/domain/types.ts'
+import {
+  ref as dbRef,
+  get,
+} from 'firebase/database'
+import {
+  db,
+} from '@/app/firebase.js'
 
 export interface ParsedErrorResponse {
   errorMessage: string
@@ -59,6 +66,10 @@ export const useCalculationsApiAdapter = (): UseCalculationsApiAdapter => {
 
   const getSku = async (): Promise<ParsedResponse<SkuBase[]>> => {
     try {
+      const articlesSnap = await get(dbRef(db, 'skuList'))
+      const data = articlesSnap.val()
+      console.log(data)
+
       const response = await apiService.getSku() as RawSku[]
 
       return parseGetSkuResponse(response)

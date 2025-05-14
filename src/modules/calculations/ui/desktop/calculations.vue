@@ -17,9 +17,9 @@ const {skuMap} = useCalculationStore()
 const {loadSkuDb} = useLoadSkuDb()
 
 onMounted(async () => {
-  if (get(skuMap).size > 0) {
-    return
-  }
+  // if (get(skuMap).size > 0) {
+  //   return
+  // }
 
   void loadSkuDb()
 })
