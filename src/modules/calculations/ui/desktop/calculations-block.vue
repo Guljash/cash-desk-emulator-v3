@@ -13,7 +13,6 @@ import {
   useAddSku,
 } from '@/modules/calculations/application/use-add-sku.ts'
 import {
-  type SkuId,
   type Sku,
 } from '@/modules/calculations/domain/types.ts'
 import {
@@ -28,12 +27,16 @@ import {
 import {
   useSetDiscount,
 } from '@/modules/calculations/application/use-set-discount.js'
+import {
+  useLoadSkuDb,
+} from '@/modules/calculations/application/use-load-sku-db.js'
 
 const {skuList, selectedSku} = useCalculationStore()
 const {addSkuById} = useAddSku()
-const {changeMultiplier} = useChangeMultiplier()
+const {changeMultiplierById} = useChangeMultiplier()
 const {deleteSku} = useDeleteSku()
 const {setDiscount, setDiscountForAll} = useSetDiscount()
+const {isLoading} = useLoadSkuDb()
 
 const inputField = ref<HTMLInputElement | undefined>(undefined)
 
@@ -123,7 +126,10 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
   <main
     class="main-content"
   >
-    <div class="articles-block">
+    <div v-if="isLoading">
+      loading...
+    </div>
+    <div v-else class="articles-block">
       <!--      <h2>{{ instanceName }}</h2> -->
 
       <CalculationsTable
@@ -142,7 +148,7 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
             Добавить артикул
           </button>
           <button
-            @click="withWrapper(() => changeMultiplier(selectedSku?.id, parseInt(inputModelValue)))"
+            @click="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
             :disabled="isBtnDisabled"
             type="button"
             class="btn btn-secondary"
@@ -173,7 +179,7 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
         <div class="input-group">
           <input
             @keydown.enter="withWrapper(onAddSku)"
-            @keydown.prevent.+="withWrapper(() => changeMultiplier(selectedSku?.id, parseInt(inputModelValue)))"
+            @keydown.prevent.+="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
             @keydown.up="onNavigateSku('up')"
             @keydown.down="onNavigateSku('down')"
             v-model="inputModelValue"

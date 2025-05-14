@@ -8,6 +8,9 @@ import {
 import {
   type SkuId,
 } from '@/modules/calculations/domain/types.ts'
+import {
+  deleteSkuInList,
+} from '@/modules/calculations/domain/sku.js'
 
 interface UseDeleteSku {
   deleteSku: (id: SkuId | undefined) => void
@@ -21,7 +24,7 @@ export const useDeleteSku = (): UseDeleteSku => {
       return
     }
 
-    set(skuList, [...get(skuList).filter((sku) => sku.id !== id)])
+    set(skuList, deleteSkuInList(get(skuList), id))
     set(selectedSku, get(skuList).at(-1))
   }
 

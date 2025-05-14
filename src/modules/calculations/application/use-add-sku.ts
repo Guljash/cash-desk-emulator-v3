@@ -15,7 +15,7 @@ import {
   useSetDiscount,
 } from '@/modules/calculations/application/use-set-discount.js'
 import {
-  addSku,
+  addSkuToList,
   createSkuItem,
   findSkuById,
 } from '@/modules/calculations/domain/sku.js'
@@ -25,28 +25,33 @@ interface UseAddSku {
 }
 
 export const useAddSku = (): UseAddSku => {
-  const {skuMap, skuList, selectedSku} = useCalculationStore()
-  const {changeMultiplier} = useChangeMultiplier()
-  const {discountForAllPercent, setDiscount} = useSetDiscount()
+  const {
+    skuMap,
+    skuList,
+    selectedSku,
+    discountForAllPercent,
+  } = useCalculationStore()
+  const {changeMultiplierById} = useChangeMultiplier()
+  const {setDiscount} = useSetDiscount()
 
   const addSkuById = (id: SkuId, multiplier: number): void => {
-    const currentSkuIdDb = skuMap.get(id)
+    const currentSkuIdDb = get(skuMap).get(id)
 
     if (currentSkuIdDb === undefined) {
       return
     }
 
-    const foundedSku = findSkuById(get(skuList), id)
+    const alreadyPushedSku = findSkuById(get(skuList), id)
 
-    if (foundedSku) {
-      changeMultiplier(id, foundedSku.multiplier + multiplier)
+    if (alreadyPushedSku) {
+      changeMultiplierById(id, alreadyPushedSku.multiplier + multiplier)
       return
     }
 
     const sku = createSkuItem(id, multiplier, currentSkuIdDb)
 
     set(selectedSku, sku)
-    set(skuList, addSku(get(skuList), sku))
+    set(skuList, addSkuToList(get(skuList), sku))
 
     if (get(discountForAllPercent) > 0) {
       setDiscount(id, get(discountForAllPercent))
