@@ -1,8 +1,6 @@
 import {
-  useCalculationsApi,
-} from '@/modules/calculations/services/calculations-api.ts'
-import {
-  type SkuBase,
+  type SkuId,
+  type SkuMap,
   type Steps,
 } from '@/modules/calculations/domain/types.ts'
 import {
@@ -23,19 +21,20 @@ export type ParsedResponse<T = undefined> = ParsedErrorResponse | {
   success: true
 }
 
-interface UseCalculationsApiAdapter {
-  getSku: () => Promise<ParsedResponse<readonly SkuBase[]>>
-}
-
 interface RawSteps {
   method: 'cost' | 'discount'
   stepsData: {multiplier: number | null; value: number}[]
 }
 
-interface RawSku {
+interface RawSkuItem {
   cost: number
-  id: number
   steps?: RawSteps
+}
+
+type RawSkuMap = Record<SkuId, RawSkuItem>
+
+interface UseCalculationsApiAdapter {
+  getSku: () => Promise<ParsedResponse<SkuMap>>
 }
 
 const parseSkuSteps = (steps: RawSteps): Steps => {
@@ -48,12 +47,12 @@ const parseSkuSteps = (steps: RawSteps): Steps => {
   }
 }
 
-const parseGetSkuResponse = (response: RawSku[]): ParsedResponse<SkuBase[]> => {
-  const data = response.map((sku) => ({
-    id: sku.id,
-    cost: sku.cost,
-    ...sku.steps && {steps: parseSkuSteps(sku.steps)},
-  }))
+const parseGetSkuResponse = (response: RawSkuMap): ParsedResponse<SkuMap> => {
+  const data = new Map(
+    Object.entries(response).map(([key, value]) => [
+      Number(key), {...value, ...value.steps && {steps: parseSkuSteps(value.steps)}},
+    ]),
+  ) as SkuMap
 
   return {
     success: true,
@@ -62,16 +61,12 @@ const parseGetSkuResponse = (response: RawSku[]): ParsedResponse<SkuBase[]> => {
 }
 
 export const useCalculationsApiAdapter = (): UseCalculationsApiAdapter => {
-  const apiService = useCalculationsApi()
   const {db} = useFirebase()
 
-  const getSku = async (): Promise<ParsedResponse<SkuBase[]>> => {
+  const getSku = async (): Promise<ParsedResponse<SkuMap>> => {
     try {
       const articlesSnap = await get(dbRef(db, 'skuList'))
-      const data = articlesSnap.val()
-      console.log(data)
-
-      const response = await apiService.getSku() as RawSku[]
+      const response = articlesSnap.val() as RawSkuMap
 
       return parseGetSkuResponse(response)
     } catch (e) {

@@ -6,7 +6,6 @@ import {
 } from '@/modules/calculations/services/calculations-api-adapter.ts'
 import {
   createSharedComposable,
-  get,
   set,
 } from '@vueuse/core'
 import {
@@ -30,12 +29,7 @@ export const useLoadSkuDb = createSharedComposable((): UseLoadSkuDb => {
     const response = await getSku()
 
     if (response.success) {
-      response.data.forEach((sku) => {
-        get(skuMap).set(sku.id, {
-          cost: sku.cost,
-          ...sku.steps && {steps: sku.steps},
-        })
-      })
+      set(skuMap, response.data)
     } else {
       console.log('error', response.errorMessage)
     }
