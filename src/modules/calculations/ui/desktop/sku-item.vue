@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   type Sku,
-  type SkuId,
 } from '@/modules/calculations/domain/types.ts'
 import {
   useCalculationStore,
@@ -12,6 +11,9 @@ import {
 import {
   get,
 } from '@vueuse/core'
+import {
+  type SkuId,
+} from '@/shared/domain/sku-map.js'
 
 const props = defineProps<{
   sku: Sku
@@ -34,7 +36,12 @@ const onDeleteSku = (id: number): void => {
     <td>__name__</td>
     <td>{{ sku.multiplier }}</td>
     <td>{{ sku.cost }} ₽</td>
-    <td><span v-if="sku.discount > 0" class="discount-badge">{{ sku.discount }}%</span></td>
+    <td>
+      <span
+        v-if="sku.discount > 0"
+        class="discount-badge"
+      >{{ sku.discount }}%</span>
+    </td>
     <td class="actions">
       <button
         type="button"

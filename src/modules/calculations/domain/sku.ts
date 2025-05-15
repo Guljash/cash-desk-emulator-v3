@@ -1,10 +1,12 @@
 import {
   type Sku,
+} from '@/modules/calculations/domain/types.js'
+import {
   type SkuBase,
   type SkuId,
   type SkuMap,
   type Steps,
-} from '@/modules/calculations/domain/types.js'
+} from '@/shared/domain/sku-map.js'
 
 export const createSkuItem = (id: SkuId, multiplier: number, skuBaseItem: Readonly<Omit<SkuBase, 'id'>>): Sku => {
   return {

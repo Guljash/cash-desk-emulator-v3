@@ -28,15 +28,15 @@ import {
   useSetDiscount,
 } from '@/modules/calculations/application/use-set-discount.js'
 import {
-  useLoadSkuDb,
-} from '@/modules/calculations/application/use-load-sku-db.js'
+  useSyncSkuMap,
+} from '@/modules/calculations/application/use-sync-sku-map-data.js'
 
 const {skuList, selectedSku} = useCalculationStore()
 const {addSkuById} = useAddSku()
 const {changeMultiplierById} = useChangeMultiplier()
 const {deleteSku} = useDeleteSku()
 const {setDiscount, setDiscountForAll} = useSetDiscount()
-const {isLoading} = useLoadSkuDb()
+const {isLoading} = useSyncSkuMap()
 
 const inputField = ref<HTMLInputElement | undefined>(undefined)
 
@@ -129,7 +129,10 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
     <div v-if="isLoading">
       loading...
     </div>
-    <div v-else class="articles-block">
+    <div
+      v-else
+      class="articles-block"
+    >
       <!--      <h2>{{ instanceName }}</h2> -->
 
       <CalculationsTable

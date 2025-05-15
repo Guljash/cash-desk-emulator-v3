@@ -6,9 +6,6 @@ import {
   useCalculationStore,
 } from '@/modules/calculations/services/calculations-store-adapter.ts'
 import {
-  type SkuId,
-} from '@/modules/calculations/domain/types.ts'
-import {
   useChangeMultiplier,
 } from '@/modules/calculations/application/use-change-multiplier.js'
 import {
@@ -19,6 +16,12 @@ import {
   createSkuItem,
   findSkuById,
 } from '@/modules/calculations/domain/sku.js'
+import {
+  useSkuMapStore,
+} from '@/shared/services/sku-map-service.js'
+import {
+  type SkuId,
+} from '@/shared/domain/sku-map.js'
 
 interface UseAddSku {
   addSkuById: (id: SkuId, multiplier: number) => void
@@ -26,18 +29,19 @@ interface UseAddSku {
 
 export const useAddSku = (): UseAddSku => {
   const {
-    skuMap,
     skuList,
     selectedSku,
     discountForAllPercent,
   } = useCalculationStore()
   const {changeMultiplierById} = useChangeMultiplier()
   const {setDiscount} = useSetDiscount()
+  const {skuMap} = useSkuMapStore()
 
   const addSkuById = (id: SkuId, multiplier: number): void => {
     const currentSkuIdDb = get(skuMap).get(id)
 
     if (currentSkuIdDb === undefined) {
+      alert('Артикул не найден')
       return
     }
 

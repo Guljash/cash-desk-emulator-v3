@@ -6,11 +6,11 @@ import {
   useCalculationStore,
 } from '@/modules/calculations/services/calculations-store-adapter.ts'
 import {
-  type SkuId,
-} from '@/modules/calculations/domain/types.ts'
-import {
   deleteSkuInList,
 } from '@/modules/calculations/domain/sku.js'
+import {
+  type SkuId,
+} from '@/shared/domain/sku-map.js'
 
 interface UseDeleteSku {
   deleteSku: (id: SkuId | undefined) => void

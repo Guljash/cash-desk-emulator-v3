@@ -5,8 +5,10 @@ import {
 } from '@/modules/calculations/services/calculations-store-adapter.ts'
 import {
   type Sku,
-  type SkuId,
 } from '@/modules/calculations/domain/types.ts'
+import {
+  type SkuId,
+} from '@/shared/domain/sku-map.js'
 
 const emit = defineEmits<{
   (e: 'selectSku', sku: Sku): void
