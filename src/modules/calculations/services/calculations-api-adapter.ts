@@ -10,8 +10,8 @@ import {
   get,
 } from 'firebase/database'
 import {
-  db,
-} from '@/app/firebase.js'
+  useFirebase,
+} from '@/shared/services/firebase.js'
 
 export interface ParsedErrorResponse {
   errorMessage: string
@@ -63,6 +63,7 @@ const parseGetSkuResponse = (response: RawSku[]): ParsedResponse<SkuBase[]> => {
 
 export const useCalculationsApiAdapter = (): UseCalculationsApiAdapter => {
   const apiService = useCalculationsApi()
+  const {db} = useFirebase()
 
   const getSku = async (): Promise<ParsedResponse<SkuBase[]>> => {
     try {
