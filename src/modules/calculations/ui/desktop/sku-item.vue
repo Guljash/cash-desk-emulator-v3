@@ -33,7 +33,7 @@ const onDeleteSku = (id: number): void => {
 <template>
   <tr :class="{active: isSkuSelected}">
     <td>{{ sku.id }}</td>
-    <td>__name__</td>
+    <td>{{ sku.description}}</td>
     <td>{{ sku.multiplier }}</td>
     <td>{{ sku.cost }} ₽</td>
     <td>

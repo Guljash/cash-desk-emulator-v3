@@ -7,8 +7,11 @@ import {
 import {
   type Sku,
 } from '@/modules/calculations/domain/types.ts'
+import {
+  type CalculationStore,
+} from '@/modules/calculations/ports.js'
 
-export const useCalculationStore = createGlobalState(() => {
+export const useCalculationStore = createGlobalState((): CalculationStore => {
   const skuList = ref<Sku[]>([])
   const selectedSku = ref<Sku>()
   const discountForAllPercent = ref(0)

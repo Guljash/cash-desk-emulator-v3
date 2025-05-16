@@ -1,18 +1,17 @@
 export type PriceChangeMethod = 'cost' | 'discount'
 
-export interface Steps {
+export interface PricingModel {
   method: PriceChangeMethod
-  stepsData: {multiplier: number; value: number}[]
+  priceTiers: {maxQuantity: number; value: number}[]
 }
 
 export type SkuId = number
 
 export interface SkuBase {
   cost: number
+  description: string
   id: SkuId
-  steps?: Steps
+  pricingModel?: PricingModel
 }
 
 export type SkuMap = Readonly<Map<SkuId, Readonly<Omit<SkuBase, 'id'>>>>
-
-export type SkuMapVersion = number | null

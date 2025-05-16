@@ -18,7 +18,7 @@ import {
 } from '@/modules/calculations/domain/sku.js'
 import {
   useSkuMapStore,
-} from '@/shared/services/sku-map-service.js'
+} from '@/shared/services/sku-map-store-adapter.js'
 import {
   type SkuId,
 } from '@/shared/domain/sku-map.js'

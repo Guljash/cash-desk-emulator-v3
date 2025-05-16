@@ -10,8 +10,10 @@ import {
 } from 'vue'
 import {
   useSkuMapApiAdapter,
+} from '@/shared/services/sku-map-api-adapter.js'
+import {
   useSkuMapStore,
-} from '@/shared/services/sku-map-service.js'
+} from '@/shared/services/sku-map-store-adapter.js'
 
 interface UseSyncSkuMap {
   isLoading: Ref<boolean>

@@ -60,7 +60,7 @@ const resetInputModelValue = (): void => {
   set(inputModelValue, '')
 }
 
-const result = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0)))
+const result = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0) * 2) / 2)
 const isBtnDisabled = computed(() => get(inputModelValue) === '')
 
 const withWrapper = <T extends () => void>(cb: T): void => {

@@ -2,10 +2,10 @@ import {
   type Sku,
 } from '@/modules/calculations/domain/types.js'
 import {
+  type PricingModel,
   type SkuBase,
   type SkuId,
   type SkuMap,
-  type Steps,
 } from '@/shared/domain/sku-map.js'
 
 export const createSkuItem = (id: SkuId, multiplier: number, skuBaseItem: Readonly<Omit<SkuBase, 'id'>>): Sku => {
@@ -14,7 +14,8 @@ export const createSkuItem = (id: SkuId, multiplier: number, skuBaseItem: Readon
     multiplier,
     cost: skuBaseItem.cost,
     discount: 0,
-    ...skuBaseItem.steps && {steps: skuBaseItem.steps},
+    description: skuBaseItem.description,
+    ...skuBaseItem.pricingModel && {pricingModel: skuBaseItem.pricingModel},
   }
 }
 
@@ -24,9 +25,16 @@ export const deleteSkuInList = (skuList: Sku[], skuId: SkuId): Sku[] => skuList.
 
 export const findSkuById = (skuList: Sku[], skuId: SkuId): Sku | undefined => skuList.find((skuItem) => skuItem.id === skuId)
 
-const applyDiscountToSku = (skuMap: SkuMap, skuItem: Sku, discount: number): Sku => (
-  {...skuItem, discount, cost: Math.round(skuMap.get(skuItem.id)!.cost * (1 - (discount / 100)))}
-)
+const applyDiscountToSku = (skuMap: SkuMap, skuItem: Sku, discount: number): Sku => {
+  const basePrice = skuMap.get(skuItem.id)!.cost
+  const discountedPrice = basePrice * (1 - discount / 100)
+
+  return {
+    ...skuItem,
+    discount,
+    cost: Number(discountedPrice.toFixed(2)),
+  }
+}
 
 export const setSkuDiscountInList = (
   skuMap: SkuMap,
@@ -37,22 +45,22 @@ export const setSkuDiscountInList = (
   return sku.id === skuId ? applyDiscountToSku(skuMap, sku, discount) : sku
 })
 
-const getStepValueByMultiplier = (stepsData: Steps['stepsData'], multiplier: number): number => {
-  return stepsData.find((step) => multiplier < step.multiplier)?.value ?? 0
+const getStepValueByMultiplier = (priceTiers: PricingModel['priceTiers'], multiplier: number): number => {
+  return priceTiers.find((step) => multiplier <= step.maxQuantity || step.maxQuantity === null)?.value ?? 0
 }
 
-const applyStepToSku = (skuMap: SkuMap, sku: Sku, multiplier: number): Sku => {
+const applyPriceTierToSku = (skuMap: SkuMap, sku: Sku, multiplier: number): Sku => {
   let changedSku = {...sku, multiplier}
 
-  switch (sku?.steps?.method) {
+  switch (sku?.pricingModel?.method) {
     case 'discount': {
-      const discount = getStepValueByMultiplier(sku.steps.stepsData, multiplier)
+      const discount = getStepValueByMultiplier(sku.pricingModel.priceTiers, multiplier)
 
       changedSku = applyDiscountToSku(skuMap, changedSku, discount)
       break
     }
     case 'cost': {
-      changedSku.cost = getStepValueByMultiplier(sku.steps.stepsData, multiplier)
+      changedSku.cost = getStepValueByMultiplier(sku.pricingModel.priceTiers, multiplier)
       break
     }
     case undefined: {
@@ -69,5 +77,5 @@ export const changeSkuMultiplierInList = (
   skuId: SkuId,
   multiplier: number,
 ): Sku[] => {
-  return skuList.map((sku) => sku.id === skuId ? applyStepToSku(skuMap, sku, multiplier) : sku)
+  return skuList.map((sku) => sku.id === skuId ? applyPriceTierToSku(skuMap, sku, multiplier) : sku)
 }

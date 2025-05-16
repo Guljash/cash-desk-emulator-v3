@@ -1,12 +1,6 @@
 import {
-  createGlobalState,
-  useLocalStorage,
-} from '@vueuse/core'
-import {
   type SkuId,
   type SkuMap,
-  type SkuMapVersion,
-  type Steps,
 } from '@/shared/domain/sku-map.js'
 import {
   useFirebase,
@@ -17,61 +11,30 @@ import {
 import {
   ref as dbRef,
 } from '@firebase/database'
+import {
+  type ParsedResponse,
+  type SkuMapApiAdapter,
+} from '@/shared/ports/sku-map-ports.js'
 
-export interface ParsedErrorResponse {
-  errorMessage: string
-  success: false
-}
-
-export type ParsedResponse<T = undefined> = ParsedErrorResponse | {
-  data: T
-  success: true
-}
-
-interface RawSteps {
+interface RawPricingModel {
   method: 'cost' | 'discount'
-  stepsData: {multiplier: number | null; value: number}[]
+  priceTiers: {maxQuantity: number | null; value: number}[]
 }
 
 interface RawSkuItem {
   cost: number
-  steps?: RawSteps
+  pricingModel?: RawPricingModel
 }
 
 type RawSkuMap = Record<SkuId, RawSkuItem>
 
-interface UseSkuMapApiAdapter {
-  getSkuMapServerVersion: () => Promise<ParsedResponse<number>>
-  loadSkuMap: () => Promise<ParsedResponse<SkuMap>>
-}
-
-export const useSkuMapStore = createGlobalState(() => {
-  const skuMap = useLocalStorage('skuMap', new Map() as SkuMap)
-  const localVersion = useLocalStorage<SkuMapVersion>('skuMapVersion', 0)
-
-  return {
-    skuMap,
-    localVersion,
-  }
-})
-
-export const useSkuMapApiAdapter = (): UseSkuMapApiAdapter => {
+export const useSkuMapApiAdapter = (): SkuMapApiAdapter => {
   const {db} = useFirebase()
-
-  const parseSkuSteps = (steps: RawSteps): Steps => {
-    return {
-      ...steps,
-      stepsData: steps.stepsData.map((item) => ({
-        ...item,
-        multiplier: item.multiplier ?? Infinity,
-      })),
-    }
-  }
 
   const parseGetSkuResponse = (response: RawSkuMap): ParsedResponse<SkuMap> => {
     const data = new Map(
       Object.entries(response).map(([key, value]) => [
-        Number(key), {...value, ...value.steps && {steps: parseSkuSteps(value.steps)}},
+        Number(key), {...value, ...value.pricingModel && {pricingModel: value.pricingModel}},
       ]),
     ) as SkuMap
 
@@ -101,7 +64,7 @@ export const useSkuMapApiAdapter = (): UseSkuMapApiAdapter => {
 
   const loadSkuMap = async (): Promise<ParsedResponse<SkuMap>> => {
     try {
-      const articlesSnap = await get(dbRef(db, 'skuList'))
+      const articlesSnap = await get(dbRef(db, 'skuMap'))
       const response = articlesSnap.val() as RawSkuMap
 
       return parseGetSkuResponse(response)
