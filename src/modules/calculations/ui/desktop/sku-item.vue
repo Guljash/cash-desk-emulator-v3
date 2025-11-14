@@ -31,37 +31,94 @@ const onDeleteSku = (id: number): void => {
 </script>
 
 <template>
-  <tr :class="{active: isSkuSelected}">
-    <td>{{ sku.id }}</td>
-    <td>{{ sku.description}}</td>
-    <td>{{ sku.multiplier }}</td>
-    <td>{{ sku.cost }} ₽</td>
-    <td>
-      <span
-        v-if="sku.discount > 0"
-        class="discount-badge"
-      >{{ sku.discount }}%</span>
-    </td>
-    <td class="actions">
-      <button
-        type="button"
-        @click.stop="onDeleteSku(sku.id)"
-        class="btn btn-danger btn-sm"
+  <div
+    class="sku-row"
+  >
+    <div
+      class="sku-item u-bold"
+      :class="{active: isSkuSelected}"
+    >
+      <span>{{ sku.id }}</span>
+    </div>
+    <div
+      class="other"
+      :class="{active: isSkuSelected}"
+    >
+      <div> <span>{{ sku.description }}</span></div>
+      <div class="u-bold"> <span>{{ sku.multiplier }} ед.</span></div>
+      <div> <span>{{ sku.cost }} ₽</span></div>
+      <div class="discount">
+        <span
+          v-if="sku.discount > 0"
+          class="discount-badge"
+        >{{ sku.discount }}%</span>
+      </div>
+      <div
+        v-if="isSkuSelected"
+        class="actions"
       >
-        🗑️
-      </button>
-    </td>
-  </tr>
+        <button
+          type="button"
+          class="btn"
+          title="Удалить артикул"
+          @click.stop="onDeleteSku(sku.id)"
+        >
+          <img
+            src="@/shared/assets/icons/delete.svg"
+            alt=""
+          >
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.articles-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
+.sku-row {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 4px;
+  cursor: pointer;
 }
 
-.articles-table .active {
-  background-color: #f5f5f5;
+.sku-row>div {
+  height: 35px;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.sku-item {
+  width: 85px;
+  justify-content: center;
+}
+
+.other>div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  min-width: 80px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.other>div:first-child {
+  width: 350px;
+}
+
+.other>div.actions{
+  justify-content: center;
+  min-width: 50px;
+}
+
+.other>div.discount{
+  justify-content: center;
+}
+
+.sku-row>div.active {
+  outline: 1.5px solid #1D9AFC;
 }
 
 .articles-table tr:hover {
@@ -74,26 +131,9 @@ const onDeleteSku = (id: number): void => {
 }
 
 .btn {
-  padding: 0.5rem 1rem;
+  background-color: transparent;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.btn-danger {
-  background-color: #d9534f;
-  color: white;
-}
-
-.btn-danger:hover {
-  background-color: #c9302c;
-}
-
-.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.85rem;
 }
 
 .discount-badge {

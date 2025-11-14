@@ -34,9 +34,11 @@ export const useSkuMapApiAdapter = (): SkuMapApiAdapter => {
   const parseGetSkuResponse = (response: RawSkuMap): ParsedResponse<SkuMap> => {
     const data = new Map(
       Object.entries(response).map(([key, value]) => [
-        Number(key), {...value, ...value.pricingModel && {pricingModel: value.pricingModel}},
+        key, {...value, ...value.pricingModel && {pricingModel: value.pricingModel}},
       ]),
     ) as SkuMap
+
+    console.log(data)
 
     return {
       success: true,

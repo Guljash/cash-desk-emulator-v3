@@ -5,7 +5,7 @@ export interface PricingModel {
   priceTiers: {maxQuantity: number; value: number}[]
 }
 
-export type SkuId = number
+export type SkuId = string
 
 export interface SkuBase {
   cost: number

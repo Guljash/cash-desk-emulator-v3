@@ -82,10 +82,9 @@ const onAddSku = (): void => {
     multiplierPart = undefined
   }
 
-  const id = parseInt(idPart ?? '')
   const multiplier = multiplierPart ? parseFloat(multiplierPart) : 1
 
-  addSkuById(id, multiplier)
+  addSkuById(idPart ?? '', multiplier)
 }
 
 const onSelectSku = async (sku: Sku): Promise<void> => {
@@ -119,7 +118,6 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
 
   set(selectedSku, get(skuList).at(getNewIndex()))
 }
-// const instanceName = ref('Клиент 1')
 </script>
 
 <template>
@@ -133,39 +131,26 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
       v-else
       class="articles-block"
     >
-      <!--      <h2>{{ instanceName }}</h2> -->
+      <div class="table-form-wrapper">
+        <CalculationsTable
+          @selectSku="onSelectSku"
+          @deleteSku="(id) => withWrapper(() => deleteSku(id))"
+        />
 
-      <CalculationsTable
-        @selectSku="onSelectSku"
-        @deleteSku="(id) => withWrapper(() => deleteSku(id))"
-      />
-
-      <div class="input-form-wrapper">
-        <div class="buttons-group">
-          <button
-            @click="withWrapper(onAddSku)"
-            :disabled="isBtnDisabled"
-            type="button"
-            class="btn btn-primary"
-          >
-            Добавить артикул
-          </button>
-          <button
-            @click="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
-            :disabled="isBtnDisabled"
-            type="button"
-            class="btn btn-secondary"
-          >
-            Изменить количество
-          </button>
-          <button
-            @click="withWrapper(() => setDiscount(selectedSku?.id, parseInt(inputModelValue)))"
-            type="button"
-            :disabled="isBtnDisabled"
-            class="btn btn-secondary"
-          >
-            Скидка по позиции
-          </button>
+        <div class="final-group">
+          <div class="text-block">
+            <div>
+              <div>
+                Товары: {{ skuList.reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0) }}
+              </div>
+              <div>
+                Скидка на чек: {{ 0 }}
+              </div>
+            </div>
+            <div>
+              Итого: {{ result }}
+            </div>
+          </div>
           <button
             @click="withWrapper(() => setDiscountForAll(parseInt(inputModelValue)))"
             type="button"
@@ -174,11 +159,10 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
           >
             Скидка на чек
           </button>
-          <span>
-            Итого: {{ result }}
-          </span>
         </div>
+      </div>
 
+      <div class="input-form-wrapper">
         <div class="input-group">
           <input
             @keydown.enter="withWrapper(onAddSku)"
@@ -191,6 +175,42 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
             class="input-field"
             placeholder="Введите артикул или название товара"
           >
+          <button
+            @click="withWrapper(onAddSku)"
+            :disabled="isBtnDisabled"
+            type="button"
+            class="btn btn-primary"
+          >
+            <img
+              src="@/shared/assets/icons/sku.svg"
+              alt=""
+            >
+            enter
+          </button>
+          <button
+            @click="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
+            :disabled="isBtnDisabled"
+            type="button"
+            class="btn btn-primary"
+          >
+            <img
+              src="@/shared/assets/icons/addMultiplier.svg"
+              alt=""
+            >
+            +
+          </button>
+          <button
+            @click="withWrapper(() => setDiscount(selectedSku?.id, parseInt(inputModelValue)))"
+            type="button"
+            :disabled="isBtnDisabled"
+            class="btn btn-secondary"
+          >
+            <img
+              src="@/shared/assets/icons/percent.svg"
+              alt=""
+            >
+            /
+          </button>
         </div>
       </div>
     </div>
@@ -199,13 +219,8 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
 
 <style scoped>
 .articles-block {
-  background: #fff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
   width: 1000px;
-  height: 700px;
+  height: 600px;
   display: flex;
   flex-direction: column;
 }
@@ -220,24 +235,32 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
 .input-group {
   display: flex;
   gap: 10px;
-  margin-bottom: 1.5rem;
 }
 
 .input-field {
   flex: 1;
-  padding: 0.75rem;
-  border: 1px solid #d0d0d0;
-  border-radius: 4px;
-  font-size: 1rem;
+  padding: 10px;
+  border: 1.5px solid #CFCFCF;
+  border-radius: 8px;
+  max-width: 404px;
+  height: 37px;
 }
 
 .input-field:focus {
   outline: none;
-  border-color: #2d2d2d;
+  border-color: #1D9AFC;
+}
+
+.input-field::placeholder {
+  color: #CFCFCF;
 }
 
 .input-form-wrapper {
   margin-top: auto;
+}
+
+.table-form-wrapper {
+  display: flex;
 }
 
 .btn {
@@ -245,12 +268,17 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-weight: 500;
   transition: background-color 0.2s;
 }
 
 .btn-primary {
-  background-color: #2d2d2d;
+  background-color: #1D9AFC;
+  border-radius: 8px;
   color: white;
 }
 
@@ -259,17 +287,26 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
 }
 
 .btn-secondary {
-  background-color: #e0e0e0;
-  color: #333;
+  border: 1.5px solid #1D9AFC;
+  border-radius: 8px;
+  color: #3A3B3F;
+  background-color: transparent;
 }
 
 .btn-secondary:hover {
   background-color: #d0d0d0;
 }
 
-.buttons-group {
+.final-group {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 22px;
+  flex-direction: column;
+}
+
+.final-group .text-block {
+  height: 130px;
+  width: 200px;
+  border-radius: 8px;
+  background-color: #FFFFFF;
 }
 </style>

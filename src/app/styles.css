@@ -5,5 +5,10 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
+  color: #4C4C4C;
+}
+
+.u-bold {
+  font-weight: bold;
 }

@@ -12,6 +12,7 @@ import {
 export type SkuMapVersion = number
 
 export const useSkuMapStore = createGlobalState((): SkuMapStoreAdapter => {
+  /** todo: пощупать indexed db */
   const skuMap = useLocalStorage('skuMap', new Map() as SkuMap)
   const localVersion = useLocalStorage<SkuMapVersion>('skuMapVersion', 0)
 

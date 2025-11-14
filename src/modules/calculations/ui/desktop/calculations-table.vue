@@ -8,7 +8,7 @@ import {
 } from '@/modules/calculations/domain/types.ts'
 import {
   type SkuId,
-} from '@/shared/domain/sku-map.js'
+} from '@/shared/domain/sku-map.ts'
 
 const emit = defineEmits<{
   (e: 'selectSku', sku: Sku): void
@@ -21,33 +21,21 @@ const onSelectSku = (sku: Sku): void => {
   emit('selectSku', sku)
 }
 
-const onDeleteSku = (id: number): void => {
+const onDeleteSku = (id: SkuId): void => {
   emit('deleteSku', id)
 }
 </script>
 
 <template>
-  <table class="articles-table">
-    <thead>
-      <tr>
-        <th>Артикул</th>
-        <th>Наименование</th>
-        <th>Количество</th>
-        <th>Цена</th>
-        <th>Скидка</th>
-        <th>Действия</th>
-      </tr>
-    </thead>
-    <tbody>
-      <SkuItem
-        v-for="sku in skuList"
-        @click="onSelectSku(sku)"
-        @deleteSku="onDeleteSku(sku.id)"
-        :key="sku.id"
-        :sku="sku"
-      />
-    </tbody>
-  </table>
+  <div class="articles-table">
+    <SkuItem
+      v-for="sku in skuList"
+      @click="onSelectSku(sku)"
+      @deleteSku="onDeleteSku(sku.id)"
+      :key="sku.id"
+      :sku="sku"
+    />
+  </div>
 </template>
 
 <style scoped>
