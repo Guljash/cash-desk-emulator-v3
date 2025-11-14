@@ -30,12 +30,16 @@ import {
 import {
   useSyncSkuMap,
 } from '@/modules/calculations/application/use-sync-sku-map-data.js'
+import {
+  useSkuMapStore,
+} from '@/shared/services/sku-map-store-adapter.js'
 
-const {skuList, selectedSku} = useCalculationStore()
+const {skuList, selectedSku, discountForAllPercent} = useCalculationStore()
 const {addSkuById} = useAddSku()
 const {changeMultiplierById} = useChangeMultiplier()
 const {deleteSku} = useDeleteSku()
 const {setDiscount, setDiscountForAll} = useSetDiscount()
+const {skuMap} = useSkuMapStore()
 const {isLoading} = useSyncSkuMap()
 
 const inputField = ref<HTMLInputElement | undefined>(undefined)
@@ -61,6 +65,7 @@ const resetInputModelValue = (): void => {
 }
 
 const result = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0) * 2) / 2)
+const resultWithoutDiscount = computed(() => Math.round(get(skuList).reduce((sum, sku) => sum + sku.multiplier * get(skuMap).get(sku.id)!.cost, 0) * 2) / 2)
 const isBtnDisabled = computed(() => get(inputModelValue) === '')
 
 const withWrapper = <T extends () => void>(cb: T): void => {
@@ -141,10 +146,10 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
           <div class="text-block">
             <div>
               <div>
-                Товары: {{ skuList.reduce((sum, sku) => sum + sku.multiplier * sku.cost, 0) }}
+                Товары: {{ resultWithoutDiscount }}
               </div>
               <div>
-                Скидка на чек: {{ 0 }}
+                Скидка на чек: {{ discountForAllPercent }}%
               </div>
             </div>
             <div>
@@ -272,6 +277,8 @@ const onNavigateSku = (direction: 'down' | 'up'): void => {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  height: 37px;
+  min-width: 70px;
   font-weight: 500;
   transition: background-color 0.2s;
 }
