@@ -25,7 +25,7 @@ const {selectedSku} = useCalculationStore()
 
 const isSkuSelected = computed(() => get(selectedSku)?.id == props.sku.id)
 
-const onDeleteSku = (id: number): void => {
+const onDeleteSku = (id: string): void => {
   emit('deleteSku', id)
 }
 </script>
@@ -95,22 +95,21 @@ const onDeleteSku = (id: number): void => {
   justify-content: center;
 }
 
-.other>div {
+.other>div:not(.actions) {
   height: 100%;
   display: flex;
   align-items: center;
   padding: 10px;
   min-width: 80px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
 }
 
 .other>div:first-child {
-  width: 350px;
+  width: 200px;
 }
 
 .other>div.actions{
   justify-content: center;
-  min-width: 50px;
+  max-width: 48px;
 }
 
 .other>div.discount{
@@ -119,6 +118,7 @@ const onDeleteSku = (id: number): void => {
 
 .sku-row>div.active {
   outline: 1.5px solid #1D9AFC;
+  outline-offset: -1px;
 }
 
 .articles-table tr:hover {

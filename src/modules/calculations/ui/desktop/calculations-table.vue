@@ -27,7 +27,10 @@ const onDeleteSku = (id: SkuId): void => {
 </script>
 
 <template>
-  <div class="articles-table">
+  <div
+    v-if="skuList.length > 0"
+    class="articles-table"
+  >
     <SkuItem
       v-for="sku in skuList"
       @click="onSelectSku(sku)"
@@ -36,26 +39,49 @@ const onDeleteSku = (id: SkuId): void => {
       :sku="sku"
     />
   </div>
+  <div
+    class="empty"
+    v-else
+  >
+    <span>Новые подсчёты появятся здесь</span>
+  </div>
 </template>
 
 <style scoped>
-.articles-block h2 {
-  color: #444;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e0e0e0;
-}
-
 .articles-table {
+  max-height: 389px;
+  overflow-y: auto;
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: #CFCFCF transparent;
 }
 
-.articles-table th {
-  background-color: #2d2d2d;
-  color: #f0f0f0;
-  padding: 0.75rem;
-  text-align: left;
+.empty {
+  width: 100%;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #CFCFCF;
+}
+
+/* WebKit браузеры */
+.articles-table::-webkit-scrollbar {
+  width: 8px;
+}
+
+.articles-table::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.articles-table::-webkit-scrollbar-thumb {
+  background: #4a90e2;
+  border-radius: 4px;
+}
+
+.articles-table::-webkit-scrollbar-thumb:hover {
+  background: #357abd;
 }
 </style>
