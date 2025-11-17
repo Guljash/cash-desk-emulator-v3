@@ -118,7 +118,7 @@ const onDeleteSku = (id: string): void => {
 
 .sku-row>div.active {
   outline: 1.5px solid #1D9AFC;
-  outline-offset: -1px;
+  outline-offset: -1.5px;
 }
 
 .articles-table tr:hover {
