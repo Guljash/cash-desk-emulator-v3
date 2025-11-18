@@ -4,10 +4,12 @@ import {
 } from 'vue-router'
 import Sidebar from '@/widgets/sidebar.vue'
 import '@/app/styles.css'
+import ModalsContainer from '@/shared/ui/modal/common/modals-container.vue'
 </script>
 
 <template>
   <div class="wrapper">
+    <ModalsContainer />
     <div class="container">
       <Sidebar />
 

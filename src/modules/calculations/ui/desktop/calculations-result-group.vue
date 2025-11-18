@@ -14,6 +14,10 @@ import type {
 import {
   useSkuMapStore,
 } from '@/shared/services/sku-map-store-adapter.js'
+import {
+  modal,
+} from '@/shared/ui/modal/common/modal.ts'
+import AddDiscountModal from '@/modules/calculations/ui/desktop/add-discount-modal.vue'
 
 const {skuMap} = useSkuMapStore()
 const {skuList, discountForAllPercent} = useCalculationStore()
@@ -30,6 +34,12 @@ const result = calculateTotal((sku: Sku) => sku.multiplier * sku.cost)
 const resultWithoutDiscount = calculateTotal((sku: Sku) => {
   return sku.multiplier * get(skuMap).get(sku.id)!.cost
 })
+
+const onSetDiscountForAll = () => {
+  modal.show({
+    component: AddDiscountModal,
+  })
+}
 </script>
 
 <template>
@@ -54,7 +64,7 @@ const resultWithoutDiscount = calculateTotal((sku: Sku) => {
       </div>
     </div>
     <button
-      @click="() => {}"
+      @click="onSetDiscountForAll"
       type="button"
       :disabled="false"
       class="btn btn-secondary"
