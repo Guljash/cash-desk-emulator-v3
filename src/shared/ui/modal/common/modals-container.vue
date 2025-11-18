@@ -16,6 +16,7 @@ import Provide from '@/shared/utils/provide.vue'
     >
       <Component
         :is="modalItem.options.component"
+        :key="modalItem.id"
         v-bind="modalItem.options.bind"
         v-on="modalItem.options.on"
       >

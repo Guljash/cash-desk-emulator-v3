@@ -42,7 +42,7 @@ const slots = defineSlots<{
     close: () => void
   }) => unknown
 }>()
-debugger
+
 const {modal} = useModal()
 
 const dialog = reactive({

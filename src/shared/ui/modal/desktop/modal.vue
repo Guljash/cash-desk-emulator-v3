@@ -50,6 +50,7 @@ const onCrossClick = (close: () => void) => {
     transition="modal"
     @cancel="emit('cancel')"
     @close="emit('close')"
+    class="modal"
   >
     <div>
       <span v-if="isLoading">is loading</span>
@@ -96,3 +97,11 @@ const onCrossClick = (close: () => void) => {
     </div>
   </Modal>
 </template>
+
+<style scoped>
+.modal {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+</style>

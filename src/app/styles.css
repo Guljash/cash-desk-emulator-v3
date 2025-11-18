@@ -48,3 +48,45 @@ body {
 .u-bold {
   font-weight: bold;
 }
+
+dialog {
+  width: 100%;
+  height: 100%;
+  block-size: 100%;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  margin: 0;
+
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  inset: 0;
+
+  @media (prefers-reduced-motion: no-preference) {
+    &, &::backdrop, & + .backdrop {
+      transition-duration: 200ms;
+      transition-behavior: allow-discrete;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    inline-size: 0;
+
+    display: none;
+  }
+
+  &::backdrop, & + .backdrop {
+    opacity: 0;
+  }
+
+  &[open] {
+    &::backdrop, & + .backdrop {
+      opacity: 1;
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+}
+
