@@ -92,6 +92,7 @@ defineExpose({
         @keydown.prevent.+="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
         @keydown.up="onNavigateSku('up')"
         @keydown.down="onNavigateSku('down')"
+        @keydown.prevent.*="withWrapper(() => setDiscount(selectedSku?.id, parseInt(inputModelValue)))"
         v-model="inputModelValue"
         type="text"
         ref="inputField"
@@ -132,7 +133,7 @@ defineExpose({
           src="@/shared/assets/icons/percent.svg"
           alt=""
         >
-        /
+        *
       </button>
     </div>
   </div>

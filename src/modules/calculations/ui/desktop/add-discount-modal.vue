@@ -1,110 +1,74 @@
 <script setup lang="ts">
+import Modal from '@/shared/ui/modal/desktop/modal.vue'
 import {
-  type Sku,
-} from '@/modules/calculations/domain/types.ts'
+  useSetDiscount,
+} from '@/modules/calculations/application/use-set-discount.js'
 import {
-  useCalculationStore,
-} from '@/modules/calculations/services/calculations-store-adapter.ts'
+  useInputGroup,
+} from '@/modules/calculations/ui/common/use-input-group.js'
 import {
-  computed,
-} from 'vue'
+  modal,
+} from '@/shared/ui/modal/common/modal.ts'
 import {
   get,
 } from '@vueuse/core'
-import {
-  type SkuId,
-} from '@/shared/domain/sku-map.js'
-import Modal from '@/shared/ui/modal/desktop/modal.vue'
 
-const props = defineProps<{
-  sku: Sku
-}>()
+const inputModel = defineModel<string>({default: ''})
 
-const emit = defineEmits<(e: 'deleteSku', id: SkuId) => void>()
+const {withWrapper} = useInputGroup(inputModel)
+const {setDiscountForAll} = useSetDiscount()
 
-const {selectedSku} = useCalculationStore()
+const onSubmit = (): void => {
+  withWrapper(() => setDiscountForAll(Number(get(inputModel))))
 
-const isSkuSelected = computed(() => get(selectedSku)?.id == props.sku.id)
-
-const onDeleteSku = (id: string): void => {
-  emit('deleteSku', id)
+  modal.hide('addDiscountModal')
 }
 </script>
 
 <template>
   <Modal>
-    <div>123 я модалка</div>
+    <template #header>
+      <h2>
+        Введите скидку
+      </h2>
+    </template>
+    <div>
+      <form @submit.prevent="onSubmit">
+        <input
+          v-model="inputModel"
+          type="text"
+          class="input-field w100"
+          placeholder="Введите скидку"
+        >
+        <button
+          type="submit"
+          class="btn btn-primary w100"
+        >
+          Применить
+        </button>
+      </form>
+    </div>
   </Modal>
 </template>
 
 <style scoped>
-.sku-row {
-  display: flex;
-  gap: 22px;
-  margin-bottom: 4px;
-  cursor: pointer;
-}
-
-.sku-row>div {
-  height: 35px;
-  background-color: #FFFFFF;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.sku-item {
-  width: 85px;
-  justify-content: center;
-}
-
-.other>div:not(.actions) {
-  height: 100%;
-  display: flex;
-  align-items: center;
+.input-field {
+  flex: 1;
   padding: 10px;
-  min-width: 80px;
+  border: 1.5px solid #CFCFCF;
+  border-radius: 8px;
+  max-width: 404px;
+  height: 37px;
+  display: block;
+  margin-bottom: 20px;
 }
 
-.other>div:first-child {
-  width: 200px;
+.input-field:focus {
+  outline: none;
+  border-color: #1D9AFC;
 }
 
-.other>div.actions{
-  justify-content: center;
-  max-width: 48px;
-}
-
-.other>div.discount{
-  justify-content: center;
-}
-
-.sku-row>div.active {
-  outline: 1.5px solid #1D9AFC;
-  outline-offset: -1.5px;
-}
-
-.articles-table tr:hover {
-  background-color: #f5f5f5;
-}
-
-.articles-table .actions {
-  display: flex;
-  gap: 5px;
-}
-
-.btn {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.discount-badge {
-  background-color: #5cb85c;
-  color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 10px;
-  font-size: 0.8rem;
+.input-field::placeholder {
+  color: #CFCFCF;
 }
 </style>

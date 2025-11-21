@@ -37,6 +37,7 @@ const resultWithoutDiscount = calculateTotal((sku: Sku) => {
 
 const onSetDiscountForAll = () => {
   modal.show({
+    name: 'addDiscountModal',
     component: AddDiscountModal,
   })
 }

@@ -31,7 +31,7 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #444;
+  background-color: #2388D7;
 }
 
 .btn-secondary {
@@ -42,7 +42,12 @@ body {
 }
 
 .btn-secondary:hover {
-  background-color: #d0d0d0;
+  background-color: #1D9AFC;
+  color: #fff;
+}
+
+.btn-secondary:hover img{
+  filter: brightness(0) invert(1);
 }
 
 .u-bold {
@@ -56,37 +61,17 @@ dialog {
   inline-size: 100%;
   max-inline-size: 100%;
   margin: 0;
-
   padding: 0;
   border: none;
   background-color: transparent;
   inset: 0;
+}
 
-  @media (prefers-reduced-motion: no-preference) {
-    &, &::backdrop, & + .backdrop {
-      transition-duration: 200ms;
-      transition-behavior: allow-discrete;
-    }
-  }
+dialog::backdrop {
+  background-color: rgba(0,0,0,0.2);
+}
 
-  &::-webkit-scrollbar {
-    inline-size: 0;
-
-    display: none;
-  }
-
-  &::backdrop, & + .backdrop {
-    opacity: 0;
-  }
-
-  &[open] {
-    &::backdrop, & + .backdrop {
-      opacity: 1;
-
-      @starting-style {
-        opacity: 0;
-      }
-    }
-  }
+.w100 {
+  width: 100%;
 }
 

@@ -52,7 +52,9 @@ const onCrossClick = (close: () => void) => {
     @close="emit('close')"
     class="modal"
   >
-    <div>
+    <div
+      class="modal__content"
+    >
       <span v-if="isLoading">is loading</span>
       <template v-else>
         <button
@@ -60,11 +62,14 @@ const onCrossClick = (close: () => void) => {
           :aria-label="closeButtonTitle"
           type="button"
           @click="onCrossClick(cancel)"
+          class="modal__close"
         >
-          close
+          <img
+            src="@/shared/assets/icons/cross.svg"
+            alt=""
+          >
         </button>
-
-        <div>
+        <div class="modal__inner">
           <slot name="modalHeader">
             <header
               v-if="'header' in slots"
@@ -78,6 +83,7 @@ const onCrossClick = (close: () => void) => {
 
           <div
             v-if="'default' in slots"
+            class="modal__body"
           >
             <slot
               :close="close"
@@ -103,5 +109,39 @@ const onCrossClick = (close: () => void) => {
   display: grid;
   justify-content: center;
   align-items: center;
+}
+
+.modal__content {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  display: grid;
+  min-width: 357px;
+  color: #4C4C4C;
+}
+
+.modal__inner {
+  padding: 22px;
+}
+
+.modal__inner header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.modal__close {
+  height: 25px;
+  width: 25px;
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  justify-self: end;
+  margin-bottom: -25px;
+}
+
+.modal__body {
+
 }
 </style>

@@ -4,7 +4,6 @@ import {
   type ModelRef,
 } from 'vue'
 import {
-  createSharedComposable,
   get,
   set,
 } from '@vueuse/core'
@@ -15,7 +14,7 @@ interface UseAddSku {
   withWrapper: (cb: () => void) => void
 }
 
-export const useInputGroup = createSharedComposable((inputModelValue: ModelRef<string>): UseAddSku => {
+export const useInputGroup = (inputModelValue: ModelRef<string>): UseAddSku => {
   const resetInputModelValue = (): void => {
     set(inputModelValue, '')
   }
@@ -33,4 +32,4 @@ export const useInputGroup = createSharedComposable((inputModelValue: ModelRef<s
     withWrapper,
     isBtnDisabled,
   }
-})
+}
