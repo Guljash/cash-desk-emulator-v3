@@ -1,0 +1,26 @@
+:root {
+  --color-border: #1D9AFC;
+  --color-text-primary: #4C4C4C;
+  --color-text-secondary: #64748b;
+  --btn-primary: #1D9AFC;
+  --btn-primary-hover: #2388D7;
+  --btn-secondary: transparent;
+  --btn-secondary-hover: #1D9AFC;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+}
