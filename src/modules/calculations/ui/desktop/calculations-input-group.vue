@@ -85,8 +85,8 @@ defineExpose({
 </script>
 
 <template>
-  <div class="input-form-wrapper">
-    <div class="input-group">
+  <div class="sku-input">
+    <div class="sku-input__group">
       <input
         @keydown.enter="withWrapper(onAddSku)"
         @keydown.prevent.+="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
@@ -96,74 +96,82 @@ defineExpose({
         v-model="inputModelValue"
         type="text"
         ref="inputField"
-        class="input-field"
+        class="sku-input__field"
         placeholder="Введите артикул или название товара"
       >
-      <button
-        @click="withWrapper(onAddSku)"
-        :disabled="isBtnDisabled"
-        type="button"
-        class="btn btn-primary"
-      >
-        <img
-          src="@/shared/assets/icons/sku.svg"
-          alt=""
+      <div class="sku-input__actions">
+        <button
+          @click="withWrapper(onAddSku)"
+          :disabled="isBtnDisabled"
+          type="button"
+          class="btn btn-primary"
         >
-        enter
-      </button>
-      <button
-        @click="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
-        :disabled="isBtnDisabled"
-        type="button"
-        class="btn btn-primary"
-      >
-        <img
-          src="@/shared/assets/icons/addMultiplier.svg"
-          alt=""
+          <img
+            src="@/shared/assets/icons/sku.svg"
+            alt=""
+          >
+          enter
+        </button>
+        <button
+          @click="withWrapper(() => changeMultiplierById(selectedSku?.id, parseInt(inputModelValue)))"
+          :disabled="isBtnDisabled"
+          type="button"
+          class="btn btn-primary"
         >
-        +
-      </button>
-      <button
-        @click="withWrapper(() => setDiscount(selectedSku?.id, parseInt(inputModelValue)))"
-        type="button"
-        :disabled="isBtnDisabled"
-        class="btn btn-secondary"
-      >
-        <img
-          src="@/shared/assets/icons/percent.svg"
-          alt=""
+          <img
+            src="@/shared/assets/icons/addMultiplier.svg"
+            alt=""
+          >
+          +
+        </button>
+        <button
+          @click="withWrapper(() => setDiscount(selectedSku?.id, parseInt(inputModelValue)))"
+          type="button"
+          :disabled="isBtnDisabled"
+          class="btn btn-secondary"
         >
-        *
-      </button>
+          <img
+            src="@/shared/assets/icons/percent.svg"
+            alt=""
+          >
+          *
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.input-group {
+.sku-input {
+  margin-top: auto;
+}
+
+.sku-input__group {
   display: flex;
   gap: 10px;
 }
 
-.input-field {
+.sku-input__field {
   flex: 1;
-  padding: 10px;
-  border: 1.5px solid #CFCFCF;
-  border-radius: 8px;
-  max-width: 404px;
+  padding: var(--spacing-sm, 10px);
+  border: 1.5px solid var(--color-text-secondary);
+  border-radius: var(--radius-md, 8px);
   height: 37px;
+  max-width: 404px;
 }
 
-.input-field:focus {
+.sku-input__field:focus {
   outline: none;
-  border-color: #1D9AFC;
+  border-color: var(--color-accent);
 }
 
-.input-field::placeholder {
-  color: #CFCFCF;
+.sku-input__field::placeholder {
+  color: var(--color-text-secondary);
 }
 
-.input-form-wrapper {
-  margin-top: auto;
+.sku-input__actions {
+  display: flex;
+  gap: var(--spacing-sm, 10px);
+  align-items: center;
 }
 </style>

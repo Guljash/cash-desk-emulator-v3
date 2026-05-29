@@ -19,6 +19,7 @@ export const useInputGroup = (inputModelValue: ModelRef<string>): UseAddSku => {
     set(inputModelValue, '')
   }
 
+  /** todo: переименовать в withReset */
   const withWrapper = <T extends () => void>(cb: T): void => {
     cb()
 

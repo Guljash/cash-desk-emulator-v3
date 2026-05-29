@@ -25,6 +25,7 @@ import {
 } from '@/modules/calculations/ui/common/use-input-group.ts'
 import CalculationsInputGroup from '@/modules/calculations/ui/desktop/calculations-input-group.vue'
 import CalculationsResultGroup from '@/modules/calculations/ui/desktop/calculations-result-group.vue'
+import Loader from '@/shared/ui/loader.vue'
 
 const calculationsInputGroupRef = ref<InstanceType<typeof CalculationsInputGroup>>()
 
@@ -60,15 +61,7 @@ const onSelectSku = async (sku: Sku): Promise<void> => {
 
 <template>
   <main class="calculations-block">
-    <div
-      class="calculations-block__loader"
-      v-if="isLoading"
-    >
-      <div class="loader-spinner">
-        <div class="loader-spinner__circle" />
-        <span class="loader-spinner__text">Загрузка данных...</span>
-      </div>
-    </div>
+    <Loader v-if="isLoading" />
     <div
       class="calculations-block__content"
       v-else
@@ -104,46 +97,5 @@ const onSelectSku = async (sku: Sku): Promise<void> => {
 
 .calculations-block__workspace {
   display: flex;
-}
-
-.calculations-block__loader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
-}
-
-.loader-spinner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.loader-spinner__circle {
-  width: 56px;
-  height: 56px;
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  border-top-color: var(--color-accent);
-  animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
-}
-
-.loader-spinner__text {
-  color: var(--color-accent);
-  font-size: 1.125rem;
-  font-weight: 500;
-  letter-spacing: 0.025em;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 </style>
