@@ -53,7 +53,7 @@ const onDeleteSku = (id: SkuId): void => {
   overflow-y: auto;
   width: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #CFCFCF transparent;
+  scrollbar-color: var(--color-text-secondary) transparent;
 }
 
 .empty {
@@ -63,7 +63,7 @@ const onDeleteSku = (id: SkuId): void => {
   justify-content: center;
   align-items: center;
   font-size: 14px;
-  color: #CFCFCF;
+  color: var(--color-text-secondary);
 }
 
 /* WebKit браузеры */

@@ -10,7 +10,10 @@
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
-  --radius-lg: 12px;
+  --color-background-primary: #4C4C4C;
+  --color-background-secondary: #ffffff;
+  --radius-xl: 12px;
+  --radius-lg: 10px;
   --radius-md: 8px;
   --radius-sm: 6px;
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);

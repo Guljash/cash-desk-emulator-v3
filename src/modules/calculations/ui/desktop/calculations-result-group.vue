@@ -46,29 +46,31 @@ const onSetDiscountForAll = () => {
 <template>
   <div
     v-show="skuList.length > 0"
-    class="final-group"
+    class="calculations-result-group"
   >
-    <div class="text-block">
+    <div class="calculations-result-group__text-block">
       <div>
-        <div>
+        <div class="calculations-result-group__row">
           <span>Итого без скидки:</span>
           <span>{{ resultWithoutDiscount }} ₽</span>
         </div>
-        <div>
+        <div class="calculations-result-group__row">
           <span>Скидка на чек:</span>
           <span>{{ discountForAllPercent }}%</span>
         </div>
       </div>
-      <div class="result u-bold">
+
+      <div class="calculations-result-group__result u-bold">
         <span>Итого:</span>
         <span>{{ result }} ₽</span>
       </div>
     </div>
+
     <button
       @click="onSetDiscountForAll"
       type="button"
       :disabled="false"
-      class="btn btn-secondary"
+      class="calculations-result-group__button btn btn-secondary"
     >
       Скидка на чек
     </button>
@@ -76,33 +78,33 @@ const onSetDiscountForAll = () => {
 </template>
 
 <style scoped>
-.final-group {
+.calculations-result-group {
   display: flex;
   gap: 22px;
   flex-direction: column;
-  margin-left: 10px;
+  margin-left: var(--spacing-sm);
 }
 
-.final-group .text-block {
+.calculations-result-group__text-block {
   height: 130px;
   width: 200px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 20px;
-  background-color: #FFFFFF;
+  background-color: var(--color-background-secondary);
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.final-group .text-block .result {
+.calculations-result-group__result {
   display: flex;
   justify-content: space-between;
   border-top: 1px solid #F4F5FA;
   padding-top: 15px;
 }
 
-.final-group .text-block div div {
+.calculations-result-group__row {
   display: flex;
   justify-content: space-between;
   padding-bottom: 15px;

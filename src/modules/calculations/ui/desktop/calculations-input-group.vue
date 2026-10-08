@@ -148,7 +148,7 @@ defineExpose({
 
 .sku-input__group {
   display: flex;
-  gap: 10px;
+  gap: var(--spacing-sm, 10px);
 }
 
 .sku-input__field {

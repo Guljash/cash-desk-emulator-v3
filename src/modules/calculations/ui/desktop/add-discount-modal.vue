@@ -55,8 +55,8 @@ const onSubmit = (): void => {
 .input-field {
   flex: 1;
   padding: 10px;
-  border: 1.5px solid #CFCFCF;
-  border-radius: 8px;
+  border: 1.5px solid var(--color-text-secondary);
+  border-radius: var(--radius-md);
   max-width: 404px;
   height: 37px;
   display: block;
@@ -65,10 +65,10 @@ const onSubmit = (): void => {
 
 .input-field:focus {
   outline: none;
-  border-color: #1D9AFC;
+  border-color: var(--color-accent);
 }
 
 .input-field::placeholder {
-  color: #CFCFCF;
+  color: var(--color-text-secondary);
 }
 </style>

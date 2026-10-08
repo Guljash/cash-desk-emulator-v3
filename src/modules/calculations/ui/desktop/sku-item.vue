@@ -35,27 +35,38 @@ const onDeleteSku = (id: string): void => {
     class="sku-row"
   >
     <div
-      class="sku-item u-bold"
+      class="sku-row__sku-item u-bold"
       :class="{active: isSkuSelected}"
     >
       <span>{{ sku.id }}</span>
     </div>
+
     <div
-      class="other"
+      class="sku-row__other"
       :class="{active: isSkuSelected}"
     >
-      <div> <span>{{ sku.description }}</span></div>
-      <div class="u-bold"> <span>{{ sku.multiplier }} ед.</span></div>
-      <div> <span>{{ sku.cost }} ₽</span></div>
-      <div class="discount">
+      <div class="sku-row__description">
+        <span>{{ sku.description }}</span>
+      </div>
+
+      <div class="sku-row__multiplier u-bold">
+        <span>{{ sku.multiplier }} ед.</span>
+      </div>
+
+      <div class="sku-row__cost">
+        <span>{{ sku.cost }} ₽</span>
+      </div>
+
+      <div class="sku-row__discount">
         <span
           v-if="sku.discount > 0"
-          class="discount-badge"
+          class="sku-row__discount-badge"
         >{{ sku.discount }}%</span>
       </div>
+
       <div
         v-if="isSkuSelected"
-        class="actions"
+        class="sku-row__actions"
       >
         <button
           type="button"
@@ -81,51 +92,47 @@ const onDeleteSku = (id: string): void => {
   cursor: pointer;
 }
 
-.sku-row>div {
+.sku-row > div {
   height: 35px;
-  background-color: #FFFFFF;
+  background-color: var(--color-background-secondary);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
 }
 
-.sku-item {
+.sku-row__sku-item {
   width: 85px;
   justify-content: center;
 }
 
-.other>div:not(.actions) {
+.sku-row__other > div:not(.sku-row__actions) {
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: var(--spacing-sm);
   min-width: 80px;
 }
 
-.other>div:first-child {
+.sku-row__description {
   width: 200px;
 }
 
-.other>div.actions{
+.sku-row__actions {
   justify-content: center;
   max-width: 48px;
 }
 
-.other>div.discount{
+.sku-row__discount {
   justify-content: center;
 }
 
-.sku-row>div.active {
+.sku-row > div.active {
   outline: 1.5px solid #1D9AFC;
   outline-offset: -1.5px;
 }
 
-.articles-table tr:hover {
-  background-color: #f5f5f5;
-}
-
-.articles-table .actions {
+.sku-row__actions {
   display: flex;
   gap: 5px;
 }
@@ -136,11 +143,11 @@ const onDeleteSku = (id: string): void => {
   cursor: pointer;
 }
 
-.discount-badge {
+.sku-row__discount-badge {
   background-color: #5cb85c;
   color: white;
   padding: 0.2rem 0.5rem;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   font-size: 0.8rem;
 }
 </style>
